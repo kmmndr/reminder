@@ -1,0 +1,55 @@
+package main
+
+import (
+	"bufio"
+	"fmt"
+	"log"
+	"os"
+	"regexp"
+	"sort"
+	"time"
+)
+
+func readFile(filename string) Birthdays {
+	birthdays := make(Birthdays, 3)
+
+	file, err := os.Open(filename)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		line := scanner.Text()
+		fmt.Println(line)
+
+		r := regexp.MustCompile(`(?P<Year>\d{4}):(?P<Month>\d{2}):(?P<Day>\d{2}):(?P<Text>[^#]*)`)
+		match := r.FindStringSubmatch(line)
+		result := make(map[string]string)
+
+		for i, name := range r.SubexpNames() {
+			if i > 0 && i <= len(match) {
+				result[name] = match[i]
+			}
+		}
+
+		loc, _ := time.LoadLocation("Europe/Berlin")
+		const shortForm = "2006-01-02"
+		str := fmt.Sprintf("%4s-%2s-%2s", result["Year"], result["Month"], result["Day"])
+		t, err := time.ParseInLocation(shortForm, str, loc)
+		if err != nil {
+			fmt.Println(err.Error())
+			panic(err)
+		}
+		birthdays = append(birthdays, Birthday{date: t, text: result["Text"]})
+	}
+
+	if err := scanner.Err(); err != nil {
+		log.Fatal(err)
+	}
+
+	sort.Sort(birthdays)
+
+	return birthdays
+}
