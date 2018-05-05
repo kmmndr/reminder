@@ -9,8 +9,22 @@ type Birthday struct {
 	text string
 }
 
+func (b Birthday) BirthdayAfter(now time.Time) time.Time {
+	year := now.Year()
+	_, month, day := b.date.Date()
+	dateCurrentYear := time.Date(year, month, day, 0, 0, 0, 0, b.date.Location())
+
+	if now.After(dateCurrentYear) {
+		return time.Date(year+1, month, day, 0, 0, 0, 0, b.date.Location())
+	} else {
+		return dateCurrentYear
+	}
+}
+
 func (b Birthday) NextBirthday() time.Time {
-	return b.date
+	now := time.Now()
+
+	return b.BirthdayAfter(now)
 }
 
 type Birthdays []Birthday
