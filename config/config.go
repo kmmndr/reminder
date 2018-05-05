@@ -1,4 +1,4 @@
-package main
+package config
 
 import (
 	"bufio"
@@ -6,12 +6,14 @@ import (
 	"log"
 	"os"
 	"regexp"
-	"sort"
+	"strings"
 	"time"
+
+	"kod.tapata.net/reminder/birthday"
 )
 
-func readFile(filename string) Birthdays {
-	birthdays := make(Birthdays, 3)
+func ReadFile(filename string) birthday.Birthdays {
+	birthdays := make(birthday.Birthdays, 0)
 
 	file, err := os.Open(filename)
 	if err != nil {
@@ -22,7 +24,7 @@ func readFile(filename string) Birthdays {
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		line := scanner.Text()
-		fmt.Println(line)
+		// fmt.Println(line)
 
 		r := regexp.MustCompile(`(?P<Year>\d{4}):(?P<Month>\d{2}):(?P<Day>\d{2}):(?P<Text>[^#]*)`)
 		match := r.FindStringSubmatch(line)
@@ -42,14 +44,12 @@ func readFile(filename string) Birthdays {
 			fmt.Println(err.Error())
 			panic(err)
 		}
-		birthdays = append(birthdays, Birthday{date: t, text: result["Text"]})
+		birthdays = append(birthdays, birthday.New(t, strings.TrimSpace(result["Text"])))
 	}
 
 	if err := scanner.Err(); err != nil {
 		log.Fatal(err)
 	}
-
-	sort.Sort(birthdays)
 
 	return birthdays
 }

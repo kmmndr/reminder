@@ -1,4 +1,4 @@
-package main
+package birthday
 
 import (
 	"fmt"
