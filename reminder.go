@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"os"
 	"time"
 
 	"kod.tapata.net/reminder/config"
@@ -30,7 +31,7 @@ func main() {
 
 	birthdays = birthdays.After(now)
 
-	oneWeekFromNow := now.Add(time.Hour * 24 * 7)
+	oneWeekFromNow := now.Add(time.Hour * 24 * 3)
 	birthdays = birthdays.Before(oneWeekFromNow)
 
 	// fmt.Printf("%s\n", birthdays.String())
@@ -39,5 +40,7 @@ func main() {
 		fmt.Println(reporter.Report(&birthdays, now))
 
 		postscriptum(*configFile, "")
+	} else {
+		os.Exit(1)
 	}
 }
