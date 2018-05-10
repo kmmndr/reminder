@@ -9,6 +9,7 @@ type Eventable interface {
 	Text() string
 	Time() time.Time
 	Date() (int, time.Month, int)
+	DaysBetween(ref time.Time) float64
 
 	String() string
 }
@@ -43,4 +44,15 @@ func (e *Event) TimeEqual(ref time.Time) bool {
 	utc, _ := time.LoadLocation("UTC")
 
 	return e.time.In(utc).Equal(ref.In(utc))
+}
+
+func (e *Event) DaysBetween(ref time.Time) float64 {
+	diff := -ref.Sub(e.Time())
+	days := diff.Hours() / 24
+
+	return days
+}
+
+func (e *Event) DaysFromNow() float64 {
+	return e.DaysBetween(time.Now())
 }

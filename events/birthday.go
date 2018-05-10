@@ -1,6 +1,7 @@
 package events
 
 import (
+	"fmt"
 	"time"
 )
 
@@ -18,6 +19,14 @@ func NewBirthday(date time.Time, text string) BirthdayEvent {
 		},
 	}
 	return b
+}
+
+func (b *BirthdayEvent) Birthday() time.Time {
+	return b.birthday
+}
+
+func (b *BirthdayEvent) String() string {
+	return fmt.Sprintf("%s: \"%s\" (%s)", b.time.String(), b.text, b.birthday)
 }
 
 func (b *BirthdayEvent) BirthdayAfter(now time.Time) time.Time {
@@ -38,16 +47,18 @@ func (b *BirthdayEvent) NextBirthday() time.Time {
 	return b.BirthdayAfter(now)
 }
 
-func (b *BirthdayEvent) Next() BirthdayEvent {
+func (b *BirthdayEvent) NextAfter(now time.Time) BirthdayEvent {
 	return BirthdayEvent{
-		birthday: b.time,
+		birthday: b.Birthday(),
 		Event: Event{
-			time: b.NextBirthday(),
-			text: b.text,
+			time: b.BirthdayAfter(now),
+			text: b.Text(),
 		},
 	}
 }
 
-func (b *BirthdayEvent) Birthdate() time.Time {
-	return b.birthday
+func (b *BirthdayEvent) Next() BirthdayEvent {
+	now := time.Now()
+
+	return b.NextAfter(now)
 }
