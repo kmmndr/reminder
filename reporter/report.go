@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/alecthomas/template"
-	"kod.tapata.net/reminder/birthday"
+	"kod.tapata.net/reminder/events"
 )
 
 const letter = `
@@ -30,7 +30,7 @@ const defaultTemplate = `
 #
 
 {{ range . }}
-- {{ .Text }} ({{ format "02/01" .Time }})
+- {{ .Text }} ({{ format "02/01" .Time }}) ({{ format "02/01" .Time }})
 {{ end }}
 
 // Numero 3 ## (01/05/2016) --> aujourd'hui !!!
@@ -45,7 +45,7 @@ ps.:
 
  */
 
-func Report(birthdays *birthday.Birthdays) string {
+func Report(birthdays *events.Birthdays) string {
 	var str strings.Builder
 
 	funcs := template.FuncMap{"format": func(layout string, date time.Time) string { return date.Format(layout) }}

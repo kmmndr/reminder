@@ -9,11 +9,11 @@ import (
 	"strings"
 	"time"
 
-	"kod.tapata.net/reminder/birthday"
+	"kod.tapata.net/reminder/events"
 )
 
-func ReadFile(filename string) birthday.Birthdays {
-	birthdays := make(birthday.Birthdays, 0)
+func ReadFile(filename string) events.Birthdays {
+	birthdays := make(events.Birthdays, 0)
 
 	file, err := os.Open(filename)
 	if err != nil {
@@ -44,7 +44,7 @@ func ReadFile(filename string) birthday.Birthdays {
 			fmt.Println(err.Error())
 			panic(err)
 		}
-		birthdays = append(birthdays, birthday.New(t, strings.TrimSpace(result["Text"])))
+		birthdays = append(birthdays, events.NewBirthday(t, strings.TrimSpace(result["Text"])))
 	}
 
 	if err := scanner.Err(); err != nil {

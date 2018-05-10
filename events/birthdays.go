@@ -1,4 +1,4 @@
-package birthday
+package events
 
 import (
 	"sort"
@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-type Birthdays []Birthday
+type Birthdays []BirthdayEvent
 
 // Len is part of sort.Interface.
 func (bs Birthdays) Len() int {
@@ -20,7 +20,7 @@ func (bs Birthdays) Swap(i, j int) {
 
 // Less is part of sort.Interface.
 func (bs Birthdays) Less(i, j int) bool {
-	return bs[i].date.Before(bs[j].date)
+	return bs[i].time.Before(bs[j].time)
 }
 
 func (bs *Birthdays) NextBirthdays() Birthdays {
@@ -39,7 +39,7 @@ func (bs *Birthdays) Before(ref time.Time) Birthdays {
 	birthdays := make(Birthdays, 0)
 
 	for _, birthday := range *bs {
-		if birthday.DateIs(ref) || birthday.date.Before(ref) {
+		if birthday.TimeEqual(ref) || birthday.time.Before(ref) {
 			birthdays = append(birthdays, birthday)
 		}
 	}
@@ -51,7 +51,7 @@ func (bs *Birthdays) After(ref time.Time) Birthdays {
 	birthdays := make(Birthdays, 0)
 
 	for _, birthday := range *bs {
-		if birthday.DateIs(ref) || birthday.date.After(ref) {
+		if birthday.TimeEqual(ref) || birthday.time.After(ref) {
 			birthdays = append(birthdays, birthday)
 		}
 	}
