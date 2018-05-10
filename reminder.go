@@ -31,13 +31,13 @@ func main() {
 
 	birthdays = birthdays.After(now)
 
-	oneWeekFromNow := now.Add(time.Hour * 24 * 3)
+	oneWeekFromNow := now.Add(time.Hour * 24 * 4)
 	birthdays = birthdays.Before(oneWeekFromNow)
 
 	// fmt.Printf("%s\n", birthdays.String())
 
 	if birthdays.Len() > 0 {
-		fmt.Println(reporter.Report(&birthdays, now))
+		fmt.Printf("%s", reporter.Report(&birthdays, now))
 
 		postscriptum(*configFile, "")
 	} else {

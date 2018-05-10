@@ -1,6 +1,7 @@
 package reporter
 
 import (
+	"fmt"
 	"log"
 	"strings"
 	"time"
@@ -12,31 +13,27 @@ import (
 const defaultTemplate = `###
 ## Notification des dates a venir prochainement
 #
-{{ range . }}
-- {{ .Text }} ({{ format "02/01/2006" .Birthday }}) --> {{ comment . }}{{ end }}
+{{ range . }}{{ birthday . }}{{ end }}
 `
 
 func Report(birthdays *events.Birthdays, ref time.Time) string {
 	var str strings.Builder
 
 	funcs := template.FuncMap{
-		"format": func(layout string, date time.Time) string {
-			return date.Format(layout)
-		},
-		"comment": func(e events.Eventable) string {
-			days := int(e.DaysBetween(ref))
-			var str string
+		"birthday": func(b *events.BirthdayEvent) string {
+			var builder strings.Builder
+			days := int(b.DaysBetween(ref))
 
-			switch days {
-			case 0:
-				str = "aujourd'hui !!!"
-			case 1:
-				str = "dans 1 jour ..."
-			case 3:
-				str = "dans 3 jours ..."
+			comments := make(map[int]string)
+			comments[0] = "aujourd'hui !!!"
+			comments[1] = "dans 1 jour ..."
+			comments[3] = "dans 3 jours ..."
+
+			if days == 0 || days == 1 || days == 3 {
+				fmt.Fprintf(&builder, "%s (%s) --> %s\n", b.Text(), b.Birthday().Format("02/01/2006"), comments[days])
 			}
 
-			return str
+			return builder.String()
 		},
 	}
 
