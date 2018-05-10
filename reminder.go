@@ -24,8 +24,8 @@ func main() {
 
 	// fmt.Printf("%s\n", birthdays.String())
 
-	//now := time.Now()
-	now := birthdays[2].Time()
+	now := time.Now()
+	// now = birthdays[2].Time()
 	// fmt.Printf("ref: %v\n", now)
 
 	birthdays = birthdays.After(now)
@@ -35,7 +35,9 @@ func main() {
 
 	// fmt.Printf("%s\n", birthdays.String())
 
-	fmt.Println(reporter.Report(&birthdays, now))
+	if birthdays.Len() > 0 {
+		fmt.Println(reporter.Report(&birthdays, now))
 
-	postscriptum(*configFile, "")
+		postscriptum(*configFile, "")
+	}
 }
