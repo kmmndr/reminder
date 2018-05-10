@@ -10,9 +10,9 @@ import (
 	"kod.tapata.net/reminder/reporter"
 )
 
-func postscriptum(reminder_conf, bin_path string) {
+func postscriptum(reminderConf, binPath string) {
 	fmt.Printf("ps.:\n")
-	fmt.Printf(" - configuration %s\n", reminder_conf)
+	fmt.Printf(" - configuration %s\n", reminderConf)
 	// fmt.Printf(" - binaire %s\n", "/home/bin/reminder.sh")
 }
 
