@@ -11,7 +11,7 @@ import (
 )
 
 const defaultTemplate = `###
-## Notification des dates a venir prochainement
+## Notification des dates a venir prochainement ;-)
 #
 
 {{ range . }}{{ birthday . }}{{ end }}
