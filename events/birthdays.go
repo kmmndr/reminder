@@ -23,16 +23,20 @@ func (bs Birthdays) Less(i, j int) bool {
 	return bs[i].time.Before(bs[j].time)
 }
 
-func (bs *Birthdays) NextBirthdays() Birthdays {
+func (bs *Birthdays) NextBirthdaysAfter(ref time.Time) Birthdays {
 	nextBirthdays := make(Birthdays, len(*bs))
 
 	for idx, birthday := range *bs {
-		nextBirthdays[idx] = birthday.Next()
+		nextBirthdays[idx] = birthday.NextAfter(ref)
 	}
 
 	sort.Sort(nextBirthdays)
 
 	return nextBirthdays
+}
+
+func (bs *Birthdays) NextBirthdays() Birthdays {
+	return bs.NextBirthdaysAfter(time.Now())
 }
 
 func (bs *Birthdays) Before(ref time.Time) Birthdays {

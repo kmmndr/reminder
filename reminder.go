@@ -16,17 +16,26 @@ func postscriptum(reminderConf, binPath string) {
 	// fmt.Printf(" - binaire %s\n", "/home/bin/reminder.sh")
 }
 
+func Bod(t time.Time) time.Time {
+	year, month, day := t.Date()
+	return time.Date(year, month, day, 0, 0, 0, 0, t.Location())
+}
+
 func main() {
 	var configFile = flag.String("reminder-conf", "reminder.conf", "Path to reminder.conf")
 	flag.Parse()
 
 	birthdays := config.ReadFile(*configFile)
-	birthdays = birthdays.NextBirthdays()
+
+	// now = birthdays[2].Time()
+	now := time.Now().Local()
+	now = Bod(now)
+	// fmt.Printf("now %s\n", now)
+
+	birthdays = birthdays.NextBirthdaysAfter(now)
 
 	// fmt.Printf("%s\n", birthdays.String())
 
-	now := time.Now()
-	// now = birthdays[2].Time()
 	// fmt.Printf("ref: %v\n", now)
 
 	birthdays = birthdays.After(now)
