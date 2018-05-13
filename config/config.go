@@ -36,10 +36,9 @@ func ReadFile(filename string) events.Birthdays {
 			}
 		}
 
-		loc, _ := time.LoadLocation("Europe/Berlin")
 		const shortForm = "2006-01-02"
 		str := fmt.Sprintf("%4s-%2s-%2s", result["Year"], result["Month"], result["Day"])
-		t, err := time.ParseInLocation(shortForm, str, loc)
+		t, err := time.Parse(shortForm, str)
 		if err != nil {
 			fmt.Println(err.Error())
 			panic(err)
