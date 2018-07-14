@@ -17,11 +17,6 @@ const defaultTemplate = `###
 {{ range . }}{{ birthday . }}{{ end }}
 `
 
-func daysBetween(value, min float64) bool {
-	max := float64(int(min) + 1)
-	return min <= value && value < max
-}
-
 func Report(birthdays *events.Birthdays, ref time.Time) string {
 	var str strings.Builder
 
@@ -29,15 +24,18 @@ func Report(birthdays *events.Birthdays, ref time.Time) string {
 		"birthday": func(b *events.BirthdayEvent) string {
 			var builder strings.Builder
 			days := b.DaysBetween(ref)
+			comment := ""
 
-			comments := make(map[int]string)
-			comments[0] = "aujourd'hui !!!"
-			comments[1] = "dans 1 jour ..."
-			comments[3] = "dans 3 jours ..."
-
-			if daysBetween(days, 0) || daysBetween(days, 1) || daysBetween(days, 3) {
-				fmt.Fprintf(&builder, "%s (%s) --> %s\n", b.Text(), b.Birthday().Format("02/01/2006"), comments[int(days)])
+			switch int(days) {
+			case 0:
+				comment = "aujourd'hui !!!"
+			case 1:
+				comment = "dans 1 jour ..."
+			default:
+				comment = fmt.Sprintf("dans %d jours ...", int(days))
 			}
+
+			fmt.Fprintf(&builder, "%s (%s) --> %s\n", b.Text(), b.Birthday().Format("02/01/2006"), comment)
 
 			return builder.String()
 		},
