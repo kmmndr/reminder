@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"kod.tapata.net/reminder/events"
+	"github.com/kmmndr/reminder/events"
 )
 
 func ReadFile(filename string) events.Birthdays {

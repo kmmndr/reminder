@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/alecthomas/template"
-	"kod.tapata.net/reminder/events"
+	"github.com/kmmndr/reminder/events"
 )
 
 const defaultTemplate = `###

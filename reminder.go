@@ -6,8 +6,8 @@ import (
 	"os"
 	"time"
 
-	"kod.tapata.net/reminder/config"
-	"kod.tapata.net/reminder/reporter"
+	"github.com/kmmndr/reminder/config"
+	"github.com/kmmndr/reminder/reporter"
 )
 
 func postscriptum(reminderConf, binPath string) {
